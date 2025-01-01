@@ -9,9 +9,9 @@ class Styles {
     );
   }
 
-  static TextStyle font22SemiBold(context) {
+  static TextStyle font24SemiBold(context) {
     return TextStyle(
-      fontSize: getResponsiveFontSize(context, fontSize: 22),
+      fontSize: getResponsiveFontSize(context, fontSize: 24),
       fontWeight: FontWeight.w600,
       color: Theme.of(context).colorScheme.onPrimary,
     );
@@ -20,6 +20,14 @@ class Styles {
   static TextStyle font50Regular(context) {
     return TextStyle(
       fontSize: getResponsiveFontSize(context, fontSize: 50),
+      fontWeight: FontWeight.w400,
+      color: Theme.of(context).colorScheme.onPrimary,
+    );
+  }
+
+  static TextStyle font35Regular(context) {
+    return TextStyle(
+      fontSize: getResponsiveFontSize(context, fontSize: 35),
       fontWeight: FontWeight.w400,
       color: Theme.of(context).colorScheme.onPrimary,
     );

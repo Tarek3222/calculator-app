@@ -7,12 +7,12 @@ class CustomIconButton extends StatelessWidget {
       required this.color,
       required this.onPressed,
       this.size,
-      required this.tooltip});
+      this.tooltip});
   final IconData icon;
   final Color color;
   final VoidCallback onPressed;
   final double? size;
-  final String tooltip;
+  final String? tooltip;
   @override
   Widget build(BuildContext context) {
     return IconButton(

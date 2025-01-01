@@ -1,13 +1,25 @@
+import 'dart:developer';
+
 import 'package:calculator_app/core/constants/styles.dart';
+import 'package:calculator_app/core/utils/custom_snack_bar.dart';
 import 'package:calculator_app/views/widgets/change_theme_widget.dart';
 import 'package:calculator_app/views/widgets/custom_background_container.dart';
 import 'package:calculator_app/views/widgets/custom_button.dart';
 import 'package:calculator_app/views/widgets/custom_icon_button.dart';
+import 'package:calculator_app/views/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  String result = '';
+  TextEditingController controller = TextEditingController();
+  List<String> operators = ['+', '-', 'x', '%', '÷'];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,17 +32,14 @@ class HomeView extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 child: Padding(
-                  padding: const EdgeInsets.only(right: 16),
+                  padding: const EdgeInsets.only(right: 16, left: 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      CustomTextField(controller: controller),
                       Text(
-                        '20+40',
-                        style: Styles.font50Regular(context),
-                      ),
-                      Text(
-                        '60',
+                        result,
                         style: Styles.font50Regular(context),
                       ),
                     ],
@@ -57,9 +66,16 @@ class HomeView extends StatelessWidget {
                       ),
                       CustomIconButton(
                         icon: Icons.backspace_outlined,
-                        tooltip: 'Backspace',
-                        color: Colors.red,
-                        onPressed: () {},
+                        color:
+                            controller.text.isEmpty ? Colors.grey : Colors.red,
+                        onPressed: () {
+                          if (controller.text.isNotEmpty) {
+                            setState(() {
+                              controller.text = controller.text
+                                  .substring(0, controller.text.length - 1);
+                            });
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -72,22 +88,65 @@ class HomeView extends StatelessWidget {
                     children: [
                       CustomButton(
                         text: 'AC',
-                        onPressed: () {},
+                        onPressed: () {
+                          if (result.isNotEmpty || controller.text.isNotEmpty) {
+                            setState(() {
+                              result = '';
+                              controller.text = '';
+                            });
+                          }
+                        },
                         color: Colors.red,
                       ),
                       CustomButton(
-                        text: '( )',
-                        onPressed: () {},
+                        text: '+/-',
+                        onPressed: () {
+                          if (controller.text.isEmpty ||
+                              controller.text == '-') {
+                            setState(() {
+                              controller.text = controller.text.startsWith('-')
+                                  ? controller.text.substring(1)
+                                  : '-${controller.text}';
+                            });
+                            return;
+                          }
+                          if (controller.text.isNotEmpty &&
+                              !operators.contains(controller
+                                  .text[controller.text.length - 1])) {
+                            setState(() {
+                              controller.text = controller.text.startsWith('-')
+                                  ? controller.text.substring(1)
+                                  : '-${controller.text}';
+                            });
+                            return;
+                          }
+                        },
                         color: Colors.green,
                       ),
                       CustomButton(
                         text: '%',
-                        onPressed: () {},
+                        onPressed: () {
+                          if (controller.text.isNotEmpty &&
+                              !operators.contains(controller
+                                  .text[controller.text.length - 1])) {
+                            setState(() {
+                              controller.text += '%';
+                            });
+                          }
+                        },
                         color: Colors.green,
                       ),
                       CustomButton(
-                        text: '/',
-                        onPressed: () {},
+                        text: '÷',
+                        onPressed: () {
+                          if (controller.text.isNotEmpty &&
+                              !operators.contains(controller
+                                  .text[controller.text.length - 1])) {
+                            setState(() {
+                              controller.text += '÷';
+                            });
+                          }
+                        },
                         color: Colors.green,
                       ),
                     ],
@@ -97,22 +156,90 @@ class HomeView extends StatelessWidget {
                     children: [
                       CustomButton(
                         text: '7',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '7';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '7';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '7';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '8',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '8';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '8';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '8';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '9',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '9';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '9';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '9';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: 'x',
-                        onPressed: () {},
+                        onPressed: () {
+                          if (controller.text.isNotEmpty &&
+                              !operators.contains(controller
+                                  .text[controller.text.length - 1])) {
+                            setState(() {
+                              controller.text += 'x';
+                            });
+                          }
+                        },
                         color: Colors.green,
                       ),
                     ],
@@ -122,22 +249,90 @@ class HomeView extends StatelessWidget {
                     children: [
                       CustomButton(
                         text: '4',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '4';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '4';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '4';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '5',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '5';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '5';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '5';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '6',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '6';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '6';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '6';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '-',
-                        onPressed: () {},
+                        onPressed: () {
+                          if (controller.text.isNotEmpty &&
+                              !operators.contains(controller
+                                  .text[controller.text.length - 1])) {
+                            setState(() {
+                              controller.text += '-';
+                            });
+                          }
+                        },
                         color: Colors.green,
                       ),
                     ],
@@ -147,22 +342,90 @@ class HomeView extends StatelessWidget {
                     children: [
                       CustomButton(
                         text: '1',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '1';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '1';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '1';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '2',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '2';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '2';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '2';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '3',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[0] == '0') {
+                            setState(() {
+                              controller.text = '3';
+                            });
+                          } else if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1] == '0') {
+                            controller.text = controller.text
+                                .substring(0, controller.text.length - 1);
+                            controller.text += '3';
+                            setState(() {});
+                          } else {
+                            setState(() {
+                              controller.text += '3';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '+',
-                        onPressed: () {},
+                        onPressed: () {
+                          if (controller.text.isNotEmpty &&
+                              !operators.contains(controller
+                                  .text[controller.text.length - 1])) {
+                            setState(() {
+                              controller.text += '+';
+                            });
+                          }
+                        },
                         color: Colors.green,
                       ),
                     ],
@@ -172,12 +435,53 @@ class HomeView extends StatelessWidget {
                     children: [
                       CustomButton(
                         text: '0',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          if (controller.text.isNotEmpty &&
+                              controller.text[controller.text.length - 1] ==
+                                  '÷') {
+                            customSnackBar(
+                                'Cannot divide by zero', context, Colors.red);
+                            return;
+                          }
+                          if (controller.text.isNotEmpty &&
+                              (controller.text[0] == '0' ||
+                                  numbers[numbers.length - 1] == '0')) {
+                            return;
+                          }
+                          setState(() {
+                            controller.text += '0';
+                          });
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       CustomButton(
                         text: '.',
-                        onPressed: () {},
+                        onPressed: () {
+                          List<String> numbers = controller.text.split(RegExp(
+                            r'(\+|\-|\*|\÷|\%|)',
+                          ));
+                          log(numbers.toString());
+                          if (numbers[numbers.length - 1].contains('.')) {
+                            return;
+                          }
+                          if (controller.text.isEmpty) {
+                            setState(() {
+                              controller.text += '0.';
+                            });
+                          } else if (operators.contains(
+                              controller.text[controller.text.length - 1])) {
+                            setState(() {
+                              controller.text += '0.';
+                            });
+                          } else {
+                            setState(() {
+                              controller.text += '.';
+                            });
+                          }
+                        },
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                       SizedBox(
