@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'dart:developer';
-
 import 'package:calculator_app/core/constants/styles.dart';
 import 'package:calculator_app/core/utils/custom_snack_bar.dart';
 import 'package:flutter/material.dart';

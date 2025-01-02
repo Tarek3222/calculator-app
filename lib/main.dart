@@ -1,7 +1,7 @@
 import 'package:calculator_app/bussnies_logic/change_theme_cubit.dart/change_theme_cubit.dart';
 import 'package:calculator_app/bussnies_logic/change_theme_cubit.dart/change_theme_states.dart';
 import 'package:calculator_app/core/theme/app_theme.dart';
-import 'package:calculator_app/views/home_view.dart';
+import 'package:calculator_app/views/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
@@ -26,7 +26,7 @@ class CalculatorApp extends StatelessWidget {
               theme: BlocProvider.of<ChangeThemeCubit>(context).isDarkMode
                   ? AppTheme.darkTheme
                   : AppTheme.lightTheme,
-              home: HomeView(),
+              home: SplashView(),
             );
           },
         );
