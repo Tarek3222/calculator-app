@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
+import 'package:calculator_app/core/constants/styles.dart';
+import 'package:calculator_app/core/utils/custom_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:whiteboard/whiteboard.dart';
@@ -13,6 +17,7 @@ class WhiteBoardView extends StatefulWidget {
 
 class _WhiteBoardViewState extends State<WhiteBoardView> {
   late WhiteBoardController controller;
+  String result = '';
 
   @override
   void initState() {
@@ -68,7 +73,12 @@ class _WhiteBoardViewState extends State<WhiteBoardView> {
                       color: Colors.red,
                       tooltip: 'Clear',
                       iconSize: 28,
-                      onPressed: controller.clear,
+                      onPressed: () {
+                        setState(() {
+                          controller.clear();
+                          result = '';
+                        });
+                      },
                     ),
                     IconButton(
                       icon: const Icon(Icons.question_answer),
@@ -78,11 +88,19 @@ class _WhiteBoardViewState extends State<WhiteBoardView> {
                       onPressed: () async {
                         final gemini = Gemini.instance;
                         // take image from whiteboard and send it to gemini
-                        gemini.prompt(parts: [
-                          Part.text('Can you solve this equation?'),
-                          Part.uint8List(await controller.convertToImage())
-                        ]).then((value) {
-                          log(value?.output ?? '');
+                        gemini.prompt(
+                          parts: [
+                            Part.text('Can you solve this equation?'),
+                            Part.uint8List(await controller.convertToImage())
+                          ],
+                        ).then(
+                          (value) {
+                            setState(() {
+                              result = value?.output ?? '';
+                            });
+                          },
+                        ).catchError((error) {
+                          customSnackBar('invalid input', context, Colors.red);
                         });
                       },
                     ),
@@ -90,6 +108,29 @@ class _WhiteBoardViewState extends State<WhiteBoardView> {
                 ),
               ),
             ),
+          ),
+          Positioned(
+            bottom: 100,
+            left: 16,
+            child: result.isEmpty
+                ? const SizedBox()
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Answer:',
+                        style: Styles.font24SemiBold(context).copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                      Text(
+                        result.split('=').last.trim().split('\n').first.trim(),
+                        style: Styles.font24SemiBold(context).copyWith(
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ],
       ),

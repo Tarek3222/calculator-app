@@ -551,9 +551,11 @@ class _HomeViewState extends State<HomeView> {
                               result = exp
                                   .evaluate(EvaluationType.REAL, ContextModel())
                                   .toString();
-                              result = Decimal.parse(result).toStringAsFixed(1);
-                              if (result.endsWith('.0')) {
-                                result = result.substring(0, result.length - 2);
+                              result = Decimal.parse(result).toStringAsFixed(2);
+                              if (result.endsWith('.00')) {
+                                result = result.substring(0, result.length - 3);
+                              } else if (result.endsWith('0')) {
+                                result = result.substring(0, result.length - 1);
                               }
                               setState(() {});
                               SharedPreferences prefs =
