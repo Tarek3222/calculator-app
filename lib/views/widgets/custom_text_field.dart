@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
         border: InputBorder.none,
       ),
       textAlign: TextAlign.right,
-      style: Styles.font35Regular(context),
+      style: Styles.font40Regular(context),
       controller: controller,
     );
   }

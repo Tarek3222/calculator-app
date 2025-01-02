@@ -17,17 +17,17 @@ class Styles {
     );
   }
 
-  static TextStyle font50Regular(context) {
+  static TextStyle font60Regular(context) {
     return TextStyle(
-      fontSize: getResponsiveFontSize(context, fontSize: 50),
+      fontSize: getResponsiveFontSize(context, fontSize: 60),
       fontWeight: FontWeight.w400,
       color: Theme.of(context).colorScheme.onPrimary,
     );
   }
 
-  static TextStyle font35Regular(context) {
+  static TextStyle font40Regular(context) {
     return TextStyle(
-      fontSize: getResponsiveFontSize(context, fontSize: 35),
+      fontSize: getResponsiveFontSize(context, fontSize: 40),
       fontWeight: FontWeight.w400,
       color: Theme.of(context).colorScheme.onPrimary,
     );

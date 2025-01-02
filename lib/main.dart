@@ -4,8 +4,10 @@ import 'package:calculator_app/core/theme/app_theme.dart';
 import 'package:calculator_app/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 
 void main() {
+  Gemini.init(apiKey: 'AIzaSyBySNh0VZ5oNRmQgJJ_y5WH5MkNQnzmlwo');
   runApp(const CalculatorApp());
 }
 

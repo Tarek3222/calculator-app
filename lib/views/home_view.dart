@@ -1,13 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 
 import 'package:calculator_app/core/constants/styles.dart';
 import 'package:calculator_app/core/utils/custom_snack_bar.dart';
+import 'package:calculator_app/views/history_view.dart';
+import 'package:calculator_app/views/white_board_view.dart';
 import 'package:calculator_app/views/widgets/change_theme_widget.dart';
 import 'package:calculator_app/views/widgets/custom_background_container.dart';
 import 'package:calculator_app/views/widgets/custom_button.dart';
 import 'package:calculator_app/views/widgets/custom_icon_button.dart';
 import 'package:calculator_app/views/widgets/custom_text_field.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
+import 'package:math_expressions/math_expressions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -40,7 +47,8 @@ class _HomeViewState extends State<HomeView> {
                       CustomTextField(controller: controller),
                       Text(
                         result,
-                        style: Styles.font50Regular(context),
+                        style: Styles.font60Regular(context)
+                            .copyWith(color: Colors.grey.shade400),
                       ),
                     ],
                   ),
@@ -57,12 +65,44 @@ class _HomeViewState extends State<HomeView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CustomIconButton(
-                        icon: Icons.history,
-                        color: Colors.grey,
-                        tooltip: 'History',
-                        size: 30,
-                        onPressed: () {},
+                      Row(
+                        children: [
+                          CustomIconButton(
+                            icon: Icons.history,
+                            color: Colors.grey,
+                            tooltip: 'History',
+                            size: 30,
+                            onPressed: () async {
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              List<String> equations =
+                                  prefs.getStringList('historyEquations') ?? [];
+                              List<String> results =
+                                  prefs.getStringList('historyResults') ?? [];
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return HistoryView(
+                                    equations: equations,
+                                    results: results,
+                                  );
+                                },
+                              ));
+                            },
+                          ),
+                          CustomIconButton(
+                            icon: Icons.draw,
+                            color: Colors.grey,
+                            tooltip: 'Write equation',
+                            size: 30,
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) {
+                                  return WhiteBoardView();
+                                },
+                              ));
+                            },
+                          ),
+                        ],
                       ),
                       CustomIconButton(
                         icon: Icons.backspace_outlined,
@@ -71,6 +111,7 @@ class _HomeViewState extends State<HomeView> {
                         onPressed: () {
                           if (controller.text.isNotEmpty) {
                             setState(() {
+                              result = '';
                               controller.text = controller.text
                                   .substring(0, controller.text.length - 1);
                             });
@@ -158,10 +199,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '7',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '7';
                             });
@@ -183,10 +225,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '8',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '8';
                             });
@@ -208,10 +251,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '9',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '9';
                             });
@@ -251,10 +295,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '4',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '4';
                             });
@@ -276,10 +321,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '5',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '5';
                             });
@@ -301,10 +347,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '6',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '6';
                             });
@@ -344,10 +391,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '1',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '1';
                             });
@@ -369,10 +417,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '2',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '2';
                             });
@@ -394,10 +443,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '3',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
-                              controller.text[0] == '0') {
+                              controller.text[0] == '0' &&
+                              controller.text.length == 1) {
                             setState(() {
                               controller.text = '3';
                             });
@@ -437,7 +487,7 @@ class _HomeViewState extends State<HomeView> {
                         text: '0',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           if (controller.text.isNotEmpty &&
                               controller.text[controller.text.length - 1] ==
@@ -461,10 +511,11 @@ class _HomeViewState extends State<HomeView> {
                         text: '.',
                         onPressed: () {
                           List<String> numbers = controller.text.split(RegExp(
-                            r'(\+|\-|\*|\÷|\%|)',
+                            r'(\+|\-|\x|\÷|\%|)',
                           ));
                           log(numbers.toString());
-                          if (numbers[numbers.length - 1].contains('.')) {
+                          if (controller.text.isNotEmpty &&
+                              numbers[numbers.length - 1].contains('.')) {
                             return;
                           }
                           if (controller.text.isEmpty) {
@@ -488,7 +539,40 @@ class _HomeViewState extends State<HomeView> {
                         width: 140,
                         child: CustomButton(
                           text: '=',
-                          onPressed: () {},
+                          onPressed: () async {
+                            if (controller.text.isNotEmpty &&
+                                !operators.contains(controller
+                                    .text[controller.text.length - 1])) {
+                              Parser p = Parser();
+                              String equation = controller.text;
+                              equation = equation.replaceAll('÷', '/');
+                              equation = equation.replaceAll('x', '*');
+                              Expression exp = p.parse(equation);
+                              result = exp
+                                  .evaluate(EvaluationType.REAL, ContextModel())
+                                  .toString();
+                              result = Decimal.parse(result).toStringAsFixed(1);
+                              if (result.endsWith('.0')) {
+                                result = result.substring(0, result.length - 2);
+                              }
+                              setState(() {});
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              List<String> historyEquations =
+                                  prefs.getStringList('historyEquations') ?? [];
+                              List<String> historyResults =
+                                  prefs.getStringList('historyResults') ?? [];
+                              historyEquations.add(controller.text);
+                              historyResults.add(result);
+                              await prefs.setStringList(
+                                  'historyEquations', historyEquations);
+                              await prefs.setStringList(
+                                  'historyResults', historyResults);
+                            } else {
+                              customSnackBar(
+                                  'Invalid Input', context, Colors.red);
+                            }
+                          },
                           color: Colors.green,
                         ),
                       ),
