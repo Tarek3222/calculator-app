@@ -1,16 +1,22 @@
-# calculator_app
+# Calculator App
+> Introducing a versatile mobile calculator app for seamless mathematical operations. From basic arithmetic to advanced functions, effortlessly calculate sums, substractions, multiplies, divisions, percentages, and more. A user-friendly interface ensures quick and accurate computations on the go.
 
-A new Flutter project.
+## Features
+- Sum : Addition calculation functionality for quick arithmetic operations.
+- Subtract : Perform subtraction with ease for precise numerical results.
+- Percent : Calculate percentages effortlessly for various mathematical scenarios.
+- Multiply : Swift multiplication capability for efficient and accurate mathematical operations.
+- Divide : Divide numbers seamlessly with this convenient mobile calculator application.
+- WhiteBoard : to write the equation by hand and it solve by model Ai.
+- history : to store history operations calculated. 
 
-## Getting Started
+## Tech
+- [Dart](https://dart.dev/get-dart/) -
+Dart is a versatile, client-optimized programming language, developed by Google, known for building cross-platform mobile, web, and desktop applications.
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## User Interface
+### Light Mode
+![Light Mode](https://raw.githubusercontent.com/Tarek3222/calculator-app/refs/heads/main/assets/light_mode/image1.jpeg)
+### Dark Mode
+![Dark Mode](https://raw.githubusercontent.com/Tarek3222/calculator-app/refs/heads/main/assets/dark_mode/image1.jpeg)
